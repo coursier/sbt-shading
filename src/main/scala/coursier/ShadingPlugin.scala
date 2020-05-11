@@ -215,7 +215,6 @@ object ShadingPlugin extends AutoPlugin {
     },
 
     addArtifact(artifact.in(Compile, packageBin), shadedPackageBin),
-    // addArtifact(Artifact("ivy", "ivy", "xml"), deliverLocal),
 
     publishLocal := {
       reallyUpdateIvyXml.dependsOn(publishLocal).value
