@@ -152,7 +152,7 @@ object ShadingPlugin extends AutoPlugin {
 
       val thisOrgName = orgName(projectID.value, scalaModuleInfoOpt)
 
-      val updateReport = update.value
+      val updateReport = updateFull.value
 
       val report = updateReport
         .configurations

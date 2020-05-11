@@ -16,7 +16,7 @@ inThisBuild(List(
 enablePlugins(ScriptedPlugin)
 
 def scala212 = "2.12.10"
-def targetSbtVersion = "1.2.8"
+def targetSbtVersion = "1.3.10"
 
 crossScalaVersions := Seq(scala212)
 scalaVersion := scala212
