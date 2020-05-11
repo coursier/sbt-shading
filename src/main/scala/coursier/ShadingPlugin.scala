@@ -152,7 +152,7 @@ object ShadingPlugin extends AutoPlugin {
 
       val thisOrgName = orgName(projectID.value, scalaModuleInfoOpt)
 
-      val updateReport = update.value
+      val updateReport = updateFull.value
 
       val report = updateReport
         .configurations
@@ -215,7 +215,6 @@ object ShadingPlugin extends AutoPlugin {
     },
 
     addArtifact(artifact.in(Compile, packageBin), shadedPackageBin),
-    // addArtifact(Artifact("ivy", "ivy", "xml"), deliverLocal),
 
     publishLocal := {
       reallyUpdateIvyXml.dependsOn(publishLocal).value
