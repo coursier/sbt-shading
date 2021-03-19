@@ -89,6 +89,7 @@ object ShadingPlugin extends AutoPlugin {
     val shadedModules = settingKey[Set[OrganizationArtifactName]]("")
     val shadingRules = taskKey[Seq[Rule]]("")
     val validNamespaces = taskKey[Set[String]]("")
+    val validEntries = taskKey[Set[String]]("")
 
     // to be set optionally by users
     val shadingVerbose = taskKey[Boolean]("")
@@ -120,14 +121,12 @@ object ShadingPlugin extends AutoPlugin {
     (modId.organization, transformName(modId.name))
   }
 
-  private def onlyNamespaces(prefixes: Set[String], jar: File, println: String => Unit): Unit = {
+  private def onlyNamespaces(isValid: String => Boolean, jar: File, println: String => Unit): Unit = {
     val zf = new ZipFile(jar)
     val unrecognized = zf.entries()
       .asScala
       .map(_.getName)
-      .filter { n =>
-        !n.startsWith("META-INF/") && !prefixes.exists(n.startsWith)
-      }
+      .filter(!isValid(_))
       .toVector
       .sorted
     for (u <- unrecognized)
@@ -140,6 +139,7 @@ object ShadingPlugin extends AutoPlugin {
     shadedModules := Set.empty,
     shadingRules := Nil,
     validNamespaces := Set.empty,
+    validEntries := Set.empty,
 
     shadingVerbose := false,
 
@@ -202,6 +202,7 @@ object ShadingPlugin extends AutoPlugin {
       val rules = shadingRules.value
       val shadedJars0 = shadedJars.value
       val validPrefixes = validNamespaces.value.map(_.replace('.', '/') + "/")
+      val validEntries = autoImport.validEntries.value
       val orig = packageBin.in(Compile).value
       val dest = orig.getParentFile / s"${orig.getName.stripSuffix(".jar")}-shading.jar"
       if (!dest.exists() || dest.lastModified() < orig.lastModified()) {
@@ -210,7 +211,11 @@ object ShadingPlugin extends AutoPlugin {
         val processor = JJProcessor(rules, verbose, false)
         CoursierJarProcessor.run((orig +: shadedJars0).toArray, dest, processor.proc, true)
       }
-      onlyNamespaces(validPrefixes, dest, log.error(_))
+      def isValid(entry: String): Boolean = 
+        validEntries.contains(entry) || 
+          entry.startsWith("META-INF/") || 
+          validPrefixes.exists(entry.startsWith)
+      onlyNamespaces(isValid, dest, log.error(_))
       dest
     },
 

@@ -1,0 +1,2 @@
+enablePlugins(ShadingPlugin)
+validEntries += "NOTICE"
