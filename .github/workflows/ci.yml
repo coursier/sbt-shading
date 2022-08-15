@@ -1,0 +1,49 @@
+name: CI
+on:
+  push:
+    branches:
+    - master
+    tags:
+    - "v*"
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        submodules: true
+    - uses: coursier/cache-action@v6.3
+    - uses: coursier/setup-action@v1.2.1
+      with:
+        jvm: 8
+        apps: sbt
+    - name: Test
+      run: sbt sbt-shading/scripted
+
+  publish:
+    needs: test
+    if: github.event_name == 'push' && github.repository == 'coursier/echo'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        submodules: true
+    - uses: coursier/cache-action@v6.3
+    - uses: coursier/setup-action@v1.2.1
+      with:
+        jvm: 8
+        apps: sbt
+    - run: .github/scripts/gpg-setup.sh
+      env:
+        PGP_SECRET: ${{ secrets.PUBLISH_SECRET_KEY }}
+    - name: Release
+      run: sbt ci-release
+      env:
+        PGP_SECRET: ${{ secrets.PUBLISH_SECRET_KEY }}
+        PGP_PASSPHRASE: ${{ secrets.PUBLISH_SECRET_KEY_PASSWORD }}
+        SONATYPE_USERNAME: ${{ secrets.PUBLISH_USER }}
+        SONATYPE_PASSWORD: ${{ secrets.PUBLISH_PASSWORD }}
