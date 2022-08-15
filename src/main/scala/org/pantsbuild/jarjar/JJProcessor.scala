@@ -1,8 +1,8 @@
-package org.pantsbuild.jarjar
+package com.eed3si9n.jarjar
 
 // from https://github.com/sbt/sbt-assembly/blob/17786404117889e5a8225c97b9b7639160fb91e8/src/main/scala/org/pantsbuild/jarjar/JJProcessor.scala
 
-import org.pantsbuild.jarjar.util.{EntryStruct, JarProcessor}
+import com.eed3si9n.jarjar.util.{EntryStruct, JarProcessor}
 
 import scala.collection.JavaConverters._
 

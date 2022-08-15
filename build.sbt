@@ -36,7 +36,5 @@ scriptedBufferLog := false
 sbtPlugin := true
 sbtVersion.in(pluginCrossBuild) := targetSbtVersion
 
-libraryDependencies += ("ch.epfl.scala" % "jarjar" % "1.7.2-patched")
-  .exclude("org.apache.maven", "maven-plugin-api")
-  .exclude("org.apache.ant", "ant")
+libraryDependencies += "com.eed3si9n.jarjarabrams" %% "jarjar-abrams-core" % "1.8.1"
 
