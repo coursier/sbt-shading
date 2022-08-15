@@ -1,4 +1,4 @@
-package org.pantsbuild.jarjar.util;
+package com.eed3si9n.jarjar.util;
 
 // adapted from https://github.com/pantsbuild/jarjar/blob/57845dc73d3e2c9b916ae4a788cfa12114fd7df1/src/main/java/org/pantsbuild/jarjar/util/StandaloneJarProcessor.java
 // - made it accepted a List<File> rather than a single File

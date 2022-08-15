@@ -5,8 +5,8 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.util.zip.ZipFile
 
-import org.pantsbuild.jarjar.Rule
-import org.pantsbuild.jarjar.util.CoursierJarProcessor
+import com.eed3si9n.jarjar.Rule
+import com.eed3si9n.jarjar.util.CoursierJarProcessor
 import sbt._
 import sbt.Keys._
 import sbt.plugins.JvmPlugin
@@ -24,7 +24,7 @@ object ShadingPlugin extends AutoPlugin {
   override def requires = JvmPlugin
 
   object Rule {
-    import org.pantsbuild.jarjar.Rule
+    import com.eed3si9n.jarjar.Rule
 
     def moveUnder(from: String, to: String): Rule =
       rename(s"$from.**", s"$to.$from.@1")
@@ -206,8 +206,8 @@ object ShadingPlugin extends AutoPlugin {
       val orig = packageBin.in(Compile).value
       val dest = orig.getParentFile / s"${orig.getName.stripSuffix(".jar")}-shading.jar"
       if (!dest.exists() || dest.lastModified() < orig.lastModified()) {
-        import org.pantsbuild.jarjar.JJProcessor
-        import org.pantsbuild.jarjar.util.StandaloneJarProcessor
+        import com.eed3si9n.jarjar.JJProcessor
+        import com.eed3si9n.jarjar.util.StandaloneJarProcessor
         val processor = JJProcessor(rules, verbose, false)
         CoursierJarProcessor.run((orig +: shadedJars0).toArray, dest, processor.proc, true)
       }
