@@ -25,7 +25,7 @@ jobs:
 
   publish:
     needs: test
-    if: github.event_name == 'push' && github.repository == 'coursier/echo'
+    if: github.event_name == 'push' && github.repository == 'coursier/sbt-shading'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
