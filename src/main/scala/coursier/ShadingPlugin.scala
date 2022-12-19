@@ -151,6 +151,7 @@ object ShadingPlugin extends AutoPlugin {
       }
 
       val thisOrgName = orgName(projectID.value, scalaModuleInfoOpt)
+      val classpathTypes = Keys.classpathTypes.value
 
       val updateReport = updateFull.value
 
@@ -192,7 +193,8 @@ object ShadingPlugin extends AutoPlugin {
         modRep <- moduleReports
         orgName0 = orgName(modRep.module, scalaModuleInfoOpt)
         if shaded(orgName0)
-        (_, f) <- modRep.artifacts
+        (a, f) <- modRep.artifacts
+        if classpathTypes.contains(a.`type`)
       } yield f
     },
 
