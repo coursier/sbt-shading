@@ -5,7 +5,7 @@
 
 Enable the plugin with
 ```scala
-addSbtPlugin("io.get-coursier" % "sbt-shading" % "2.0.0")
+addSbtPlugin("io.get-coursier" % "sbt-shading" % "2.1.1")
 ```
 in `project/plugins.sbt`. sbt-shading requires sbt >= 1.3.0.
 
