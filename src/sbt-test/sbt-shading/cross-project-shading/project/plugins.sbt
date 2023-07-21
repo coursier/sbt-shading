@@ -10,4 +10,5 @@
   addSbtPlugin("io.get-coursier" % "sbt-shading" % pluginVersion)
 }
 
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.25")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.12.0")
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.3.2")
