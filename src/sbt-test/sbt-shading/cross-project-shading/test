@@ -8,4 +8,4 @@ $ exec java -jar coursier launch io.get-coursier.test:shading-cross-test_2.11:0.
 > rootJS/run
 > rootJS/publishLocal
 -$ exec java -jar coursier launch io.get-coursier.test:shading-cross-test_sjs1_2.11:0.1.0-SNAPSHOT
--$ exec java -jar coursier launch io.get-coursier.test:shading-cross-test_sjs1_2.11:0.1.0-SNAPSHOT -- --shaded
+$ exec java -jar coursier launch io.get-coursier.test:shading-cross-test_sjs1_2.11:0.1.0-SNAPSHOT -- --shaded

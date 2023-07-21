@@ -16,13 +16,16 @@ enablePlugins(ShadingPlugin)
 
 // Add the dependencies to shade along the other (non-shaded) ones
 libraryDependencies += "io.argonaut" %% "argonaut" % "6.2"
+libraryDependencies += "org.scalameta" %%% "trees" % "4.8.5"
 
 // Tell the plugin to shade some dependencies.
 // This also shades all their transitive dependencies, except those
 // that are also brought by non-shaded dependencies.
 // This merges those dependencies JARs in our output JAR, along with our
 // classes.
-shadedModules += "io.argonaut" %% "argonaut"
+// NB: the version itself doesn't matter but `%%` vs `%%%` does
+shadedDependencies += "io.argonaut" %% "argonaut" % "<ignored>"
+shadedDependencies += "org.scalameta" %%% "trees" % "<ignored>"
 
 // Tell the plugin to rename some namespaces in the output JAR.
 // This renames any of our classes in this namespace, and adjusts
