@@ -8,14 +8,12 @@ import argonaut._
 import Foo._
 
 object Main extends App {
-
   val expectedClassName0 = expectedClassName(args.headOption == Some("--shaded"))
 
-  Console.err.println(s"Expected class name: $expectedClassName0")
-  Console.err.println(s"Class name: $className")
-
   if (className != expectedClassName0)
-    sys.error(s"Expected class name $expectedClassName0, got $className")
+    sys.error(s"Expected JVM class name $expectedClassName0, got $className")
+
+  Console.err.println(s"Expected JVM class name: $expectedClassName0, got the same")
 
   val msg = Json.obj().nospaces
 
