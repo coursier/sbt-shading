@@ -34,7 +34,7 @@ scriptedLaunchOpts ++= Seq(
 )
 scriptedBufferLog := false
 sbtPlugin := true
-sbtVersion.in(pluginCrossBuild) := targetSbtVersion
+(pluginCrossBuild / sbtVersion) := targetSbtVersion
 
 libraryDependencies += "com.eed3si9n.jarjarabrams" %% "jarjar-abrams-core" % "1.8.2"
 
