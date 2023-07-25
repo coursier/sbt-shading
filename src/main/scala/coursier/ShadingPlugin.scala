@@ -87,6 +87,7 @@ object ShadingPlugin extends AutoPlugin {
   object autoImport {
     // to be set by users
     val shadedModules = settingKey[Set[OrganizationArtifactName]]("")
+    val shadedDependencies = settingKey[Set[ModuleID]]("")
     val shadingRules = taskKey[Seq[Rule]]("")
     val validNamespaces = taskKey[Set[String]]("")
     val validEntries = taskKey[Set[String]]("")
@@ -134,9 +135,17 @@ object ShadingPlugin extends AutoPlugin {
     assert(unrecognized.isEmpty)
   }
 
+  private lazy val shadedOrgNames = Def.setting[Set[(String, String)]] {
+    val scalaModuleInfoOpt = scalaModuleInfo.value
+    val allShadedDeps = shadedDependencies.value.iterator ++
+      shadedModules.value.iterator.map(_ % "foo")
+    allShadedDeps.map(orgName(_, scalaModuleInfoOpt)).toSet
+  }
+
   override lazy val projectSettings = Def.settings(
 
     shadedModules := Set.empty,
+    shadedDependencies := Set.empty,
     shadingRules := Nil,
     validNamespaces := Set.empty,
     validEntries := Set.empty,
@@ -145,10 +154,7 @@ object ShadingPlugin extends AutoPlugin {
 
     shadedJars := {
       val scalaModuleInfoOpt = scalaModuleInfo.value
-      val shadedModules0 = shadedModules.value.map { orgName0 =>
-        val modId = orgName0 % "foo"
-        orgName(modId, scalaModuleInfoOpt)
-      }
+      val shadedModules0 = shadedOrgNames.value
 
       val thisOrgName = orgName(projectID.value, scalaModuleInfoOpt)
       val classpathTypes = Keys.classpathTypes.value
@@ -228,11 +234,7 @@ object ShadingPlugin extends AutoPlugin {
     },
 
     deliverLocal := {
-      val scalaModuleInfoOpt = scalaModuleInfo.value
-      val shadedModules0 = shadedModules.value.map { orgName0 =>
-        val modId = orgName0 % "foo"
-        orgName(modId, scalaModuleInfoOpt)
-      }
+      val shadedModules0 = shadedOrgNames.value
 
       val file = deliverLocal.value
       updateIvyXml(file, shadedModules0)
@@ -241,12 +243,8 @@ object ShadingPlugin extends AutoPlugin {
 
     pomPostProcess := {
       val previous = pomPostProcess.value
-      val scalaModuleInfoOpt = scalaModuleInfo.value
 
-      val shadedModules0 = shadedModules.value.map { orgName0 =>
-        val modId = orgName0 % "foo"
-        orgName(modId, scalaModuleInfoOpt)
-      }
+      val shadedModules0 = shadedOrgNames.value
 
       // Originally based on https://github.com/olafurpg/coursier-small/blob/408528d10cea1694c536f55ba1b023e55af3e0b2/build.sbt#L44-L56
       val transformer = new RuleTransformer(new RewriteRule {

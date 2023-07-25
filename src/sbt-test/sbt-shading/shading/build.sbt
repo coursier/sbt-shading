@@ -9,7 +9,7 @@ libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-reflect" % scalaVersion.value // not shading that one
 )
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.11.12"
 organization := "io.get-coursier.test"
 name := "shading-base-test"
 version := "0.1.0-SNAPSHOT"

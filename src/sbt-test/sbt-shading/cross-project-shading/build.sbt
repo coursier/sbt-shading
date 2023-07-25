@@ -1,16 +1,13 @@
 
-lazy val root = crossProject
+lazy val root = crossProject(JSPlatform, JVMPlatform)
   .in(file("."))
-  .jvmConfigure(
-    _.enablePlugins(ShadingPlugin)
-  )
-  .jvmSettings(
-    shadedModules += "io.argonaut" %% "argonaut",
+  .enablePlugins(ShadingPlugin)
+  .settings(
     shadingRules += ShadingRule.moveUnder("argonaut", "foo.shaded"),
     validNamespaces += "foo",
-    libraryDependencies += "io.argonaut" %% "argonaut" % "6.2-RC2"
-  )
-  .settings(
+    shadedDependencies += "io.argonaut" %%% "argonaut" % "foo",
+    libraryDependencies += "io.argonaut" %%% "argonaut" % "6.2.5",
+    scalaJSUseMainModuleInitializer := true,
     scalaVersion := "2.11.12",
     organization := "io.get-coursier.test",
     name := "shading-cross-test",
