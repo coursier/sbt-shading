@@ -4,8 +4,8 @@ import java.io.File
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.util.zip.ZipFile
-
 import com.eed3si9n.jarjar.Rule
+import com.eed3si9n.jarjar.misplaced.MisplacedClassProcessorFactory
 import com.eed3si9n.jarjar.util.CoursierJarProcessor
 import sbt._
 import sbt.Keys._
@@ -215,9 +215,8 @@ object ShadingPlugin extends AutoPlugin {
       val dest = orig.getParentFile / s"${orig.getName.stripSuffix(".jar")}-shading.jar"
       if (!dest.exists() || dest.lastModified() < orig.lastModified()) {
         import com.eed3si9n.jarjar.JJProcessor
-        import com.eed3si9n.jarjar.util.StandaloneJarProcessor
-        val processor = JJProcessor(rules, verbose, false)
-        CoursierJarProcessor.run((orig +: shadedJars0).toArray, dest, processor.proc, true)
+        val processor = new JJProcessor(rules, verbose, false, MisplacedClassProcessorFactory.Strategy.FATAL.toString)
+        CoursierJarProcessor.run((orig +: shadedJars0).toArray, dest, processor, true)
       }
       def isValid(entry: String): Boolean = 
         validEntries.contains(entry) || 
