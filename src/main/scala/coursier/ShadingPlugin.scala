@@ -18,7 +18,7 @@ import scala.collection.JavaConverters._
 import scala.xml.{Comment, Elem, Node => XmlNode}
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 
-object ShadingPlugin extends AutoPlugin {
+object ShadingPlugin extends AutoPlugin with ShadingPluginCompat {
 
   override def trigger = noTrigger
   override def requires = JvmPlugin
@@ -88,16 +88,20 @@ object ShadingPlugin extends AutoPlugin {
     // to be set by users
     val shadedModules = settingKey[Set[OrganizationArtifactName]]("")
     val shadedDependencies = settingKey[Set[ModuleID]]("")
+    @transient
     val shadingRules = taskKey[Seq[Rule]]("")
     val validNamespaces = taskKey[Set[String]]("")
+    @transient
     val validEntries = taskKey[Set[String]]("")
 
     // to be set optionally by users
     val shadingVerbose = taskKey[Boolean]("")
 
     // set by ShadingPlugin
+    @transient
     val shadedJars = taskKey[Seq[File]]("")
-    val shadedPackageBin = taskKey[File]("")
+    @transient
+    val shadedPackageBin = taskKey[FileRef]("")
 
     val ShadingRule = Rule
 
@@ -211,7 +215,7 @@ object ShadingPlugin extends AutoPlugin {
       val shadedJars0 = shadedJars.value
       val validPrefixes = validNamespaces.value.map(_.replace('.', '/') + "/")
       val validEntries = autoImport.validEntries.value
-      val orig = (Compile / packageBin).value
+      val orig = toFile((Compile / packageBin).value)
       val dest = orig.getParentFile / s"${orig.getName.stripSuffix(".jar")}-shading.jar"
       if (!dest.exists() || dest.lastModified() < orig.lastModified()) {
         import com.eed3si9n.jarjar.JJProcessor
@@ -223,7 +227,7 @@ object ShadingPlugin extends AutoPlugin {
           entry.startsWith("META-INF/") || 
           validPrefixes.exists(entry.startsWith)
       onlyNamespaces(isValid, dest, log.error(_))
-      dest
+      toVirtualFile(dest)
     },
 
     addArtifact(Compile / packageBin / artifact, shadedPackageBin),
