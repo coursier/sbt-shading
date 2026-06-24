@@ -10,6 +10,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java: [8, 17]
     steps:
     - uses: actions/checkout@v7
       with:
@@ -18,10 +22,14 @@ jobs:
     - uses: coursier/cache-action@v8.1
     - uses: coursier/setup-action@v3.0.0
       with:
-        jvm: 8
+        jvm: ${{ matrix.java }}
         apps: sbt
-    - name: Test
+    - name: Test sbt 1
       run: sbt sbt-shading/scripted
+      if: ${{ matrix.java == '8' }}
+    - name: Test sbt 2
+      run: sbt '++ 3.x' scriptedTestSbt2
+      if: ${{ matrix.java != '8' }}
 
   publish:
     if: github.event_name == 'push' && github.repository == 'coursier/sbt-shading'
