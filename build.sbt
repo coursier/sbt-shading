@@ -40,5 +40,5 @@ sbtPlugin := true
 
 scriptedSbt := "1.9.9"
 
-libraryDependencies += "com.eed3si9n.jarjarabrams" %% "jarjar-abrams-core" % "1.16.0"
+libraryDependencies += "com.eed3si9n.jarjarabrams" %% "jarjar-abrams-core" % "1.17.0"
 
