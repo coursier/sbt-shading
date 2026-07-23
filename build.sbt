@@ -26,6 +26,12 @@ scalacOptions ++= Seq(
   "-feature",
   "-deprecation"
 )
+javacOptions ++= {
+  if (scalaBinaryVersion.value == "2.12")
+    Seq("-source", "8", "-target", "8")
+  else
+    Nil
+}
 
 // https://github.com/sbt/sbt/issues/5049#issuecomment-528960415
 dependencyOverrides := {
