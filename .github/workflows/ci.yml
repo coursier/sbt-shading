@@ -44,5 +44,5 @@ jobs:
       env:
         PGP_SECRET: ${{ secrets.PUBLISH_SECRET_KEY }}
         PGP_PASSPHRASE: ${{ secrets.PUBLISH_SECRET_KEY_PASSWORD }}
-        SONATYPE_USERNAME: ${{ secrets.PUBLISH_USER }}
-        SONATYPE_PASSWORD: ${{ secrets.PUBLISH_PASSWORD }}
+        SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+        SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
