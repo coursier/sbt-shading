@@ -46,7 +46,7 @@ sbtPlugin := true
 (pluginCrossBuild / sbtVersion) := {
   scalaBinaryVersion.value match {
     case "3" =>
-      "2.0.0"
+      "2.0.3"
     case _ =>
       targetSbtVersion
   }
