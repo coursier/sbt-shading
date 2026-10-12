@@ -3,6 +3,7 @@ package coursier
 import java.io.File
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
+import java.security.MessageDigest
 import java.util.zip.ZipFile
 import com.eed3si9n.jarjar.Rule
 import com.eed3si9n.jarjar.misplaced.MisplacedClassProcessorFactory
@@ -129,8 +130,43 @@ object ShadingPlugin extends AutoPlugin with ShadingPluginCompat {
     allShadedDeps.map(orgName(_, scalaModuleInfoOpt)).toSet
   }
 
+  /**
+   *  - sbt 2.1 publishes without Ivy, and writes the local ivy.xml from the same project as
+   *    dependency resolution, so rewrite the file it wrote, and its checksums.
+   *  - sbt 1 and 2.0 publish with Ivy and need the shaded ivy.xml republished, but a build
+   *    without Ivy cannot even load a class that refers to it.
+   */
   private def ivyXmlSettings =
-    IvyRepublish.settings
+    try IvyRepublish.settings
+    catch {
+      case _: NoClassDefFoundError =>
+        Seq(publishLocal := rewriteLocalIvyXml.dependsOn(publishLocal).value)
+    }
+
+  private val rewriteLocalIvyXml = Def.task {
+    val shaded = shadedOrgNames.value
+    val (org, name) = orgName(projectID.value, scalaModuleInfo.value)
+    val revision = version.value
+    def prop(name: String) = sys.props.get(name).map(_.trim).filter(_.nonEmpty)
+    // where sbt 2.1 looks for the Ivy home when `ivyPaths` does not set one
+    val home = ivyHome.value.orElse(prop("sbt.ivy.home").orElse(prop("ivy.home")).map(new File(_)))
+      .getOrElse(new File(sys.props("user.home"), ".ivy2"))
+    for {
+      ivyXml <- (home / "local" / org / name ** "ivy.xml").get()
+      if ivyXml.getParentFile.getParentFile.getName == revision
+    } {
+      updateIvyXml(ivyXml, shaded)
+      def update(ext: String, algorithm: String): Unit = {
+        val checksum = new File(s"$ivyXml.$ext")
+        if (checksum.exists) {
+          val digest = MessageDigest.getInstance(algorithm).digest(IO.readBytes(ivyXml))
+          IO.write(checksum, digest.map("%02x".format(_)).mkString)
+        }
+      }
+      update("md5", "MD5")
+      update("sha1", "SHA-1")
+    }
+  }
 
   override lazy val projectSettings = Def.settings(
 

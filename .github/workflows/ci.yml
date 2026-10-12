@@ -30,6 +30,9 @@ jobs:
     - name: Test sbt 2
       run: sbt '++ 3.x' scriptedTestSbt2
       if: ${{ matrix.java != '8' }}
+    - name: Test sbt 2.1
+      run: sbt '++ 3.x' 'set scriptedSbt := "2.1.0-RC1"' scriptedTestSbt2
+      if: ${{ matrix.java != '8' }}
 
   publish:
     if: github.event_name == 'push' && github.repository == 'coursier/sbt-shading'
