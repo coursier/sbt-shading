@@ -71,19 +71,6 @@ object ShadingPlugin extends AutoPlugin with ShadingPluginCompat {
     Files.write(file.toPath, updatedFileContent.getBytes(StandardCharsets.UTF_8))
   }
 
-  private val reallyUpdateIvyXml = Def.task {
-    val baseFile = deliverLocal.value
-    val log = streams.value.log
-    val resolverName = publishLocalConfiguration.value.resolverName.getOrElse(???)
-    ivyModule.value.withModule(log) {
-      case (ivy, md, _) =>
-        val resolver = ivy.getSettings.getResolver(resolverName)
-        val artifact = new org.apache.ivy.core.module.descriptor.MDArtifact(md, "ivy", "ivy", "xml", true)
-        log.info(s"Writing ivy.xml with shading at $baseFile")
-        resolver.publish(artifact, baseFile, true)
-    }
-  }
-
   object autoImport {
     // to be set by users
     val shadedModules = settingKey[Set[OrganizationArtifactName]]("")
@@ -141,6 +128,9 @@ object ShadingPlugin extends AutoPlugin with ShadingPluginCompat {
       shadedModules.value.iterator.map(_ % "foo")
     allShadedDeps.map(orgName(_, scalaModuleInfoOpt)).toSet
   }
+
+  private def ivyXmlSettings =
+    IvyRepublish.settings
 
   override lazy val projectSettings = Def.settings(
 
@@ -228,9 +218,7 @@ object ShadingPlugin extends AutoPlugin with ShadingPluginCompat {
 
     addArtifact(Compile / packageBin / artifact, shadedPackageBin),
 
-    publishLocal := {
-      reallyUpdateIvyXml.dependsOn(publishLocal).value
-    },
+    ivyXmlSettings,
 
     deliverLocal := {
       val shadedModules0 = shadedOrgNames.value
