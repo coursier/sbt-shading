@@ -19,7 +19,7 @@ jobs:
       with:
         fetch-depth: 0
         submodules: true
-    - uses: coursier/cache-action@v8.1
+    - uses: coursier/cache-action@v8.2
     - uses: coursier/setup-action@v3.0.4
       with:
         jvm: ${{ matrix.java }}
@@ -39,7 +39,7 @@ jobs:
       with:
         fetch-depth: 0
         submodules: true
-    - uses: coursier/cache-action@v8.1
+    - uses: coursier/cache-action@v8.2
     - uses: coursier/setup-action@v3.0.4
       with:
         jvm: 17
