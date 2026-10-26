@@ -1,6 +1,7 @@
 package coursier
 
 import java.io.File
+import sbt.*
 import sbt.Keys.*
 import xsbti.VirtualFileRef
 
@@ -12,4 +13,6 @@ private[coursier] trait ShadingPluginCompat { self : ShadingPlugin.type =>
     fileConverter.value.toPath(file).toFile
 
   type FileRef = sbt.HashedVirtualFileRef
+
+  def ivyHome: Def.Initialize[Option[File]] = Def.setting(ivyPaths.value.ivyHome.map(File(_)))
 }

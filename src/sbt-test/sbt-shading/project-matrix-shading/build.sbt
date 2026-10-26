@@ -9,8 +9,10 @@ def rowSettings(suffix: String) = Seq(
   // shading rebuilds this row's artifact name to tell its own module from its dependencies; without
   // the platform that name matches nothing, every module counts as shaded, and packaging asserts
   TaskKey[Unit]("checkRow") := Def.taskDyn {
-    // on sbt 2, the platform is not part of the CrossVersion, and this fails
-    val shouldFail = sbtVersion.value.startsWith("2.") && !suffix.startsWith("_2")
+    // before sbt 2.0.7, the platform is not part of the CrossVersion (sbt/sbt#9621), and this fails
+    import sbt.librarymanagement._
+    val shouldFail = !suffix.startsWith("_2") &&
+      VersionNumber(sbtVersion.value).matchesSemVer(SemanticSelector(">=2.0.0 <2.0.7"))
     if (shouldFail) shadedPackageBin.failure.map(_ => ()) else shadedPackageBin.map(_ => ())
   }.value
 )
