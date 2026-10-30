@@ -20,7 +20,7 @@ enablePlugins(ScriptedPlugin)
 def scala212 = "2.12.21"
 def targetSbtVersion = "1.3.10"
 
-crossScalaVersions := Seq(scala212, "3.8.4")
+crossScalaVersions := Seq(scala212, "3.10.0")
 scalaVersion := scala212
 scalacOptions ++= Seq(
   "-feature",
