@@ -84,7 +84,7 @@ TaskKey[Unit]("scriptedTestSbt2") := Def.taskDyn {
     .toList
   val log = streams.value.log
   val exclude: Set[(String, String)] = Set(
-    "cross-project-shading" // TODO scala-js and sbt-scalajs-crossprojct plugin
+    "cross-project-shading" // require sbt 2.1
   ).map("sbt-shading" -> _)
   val args = values.filterNot(exclude).map { case (x1, x2) => s"${x1}/${x2}" }
   val arg = args.mkString(" ", " ", "")

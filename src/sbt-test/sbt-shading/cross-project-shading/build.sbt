@@ -1,3 +1,4 @@
+import PluginTestCompat._
 
 lazy val root = crossProject(JSPlatform, JVMPlatform)
   .in(file("."))
