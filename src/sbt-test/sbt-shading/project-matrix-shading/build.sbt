@@ -27,7 +27,7 @@ lazy val root = projectMatrix
     validNamespaces += "foo",
     // declared so it counts as a direct dependency and is not bundled with the shaded ones
     libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-    organization := "io.get-coursier.test",
+    organization := "com.github.sbt.test",
     name := "shading-matrix-test",
     version := "0.1.0-SNAPSHOT"
   )

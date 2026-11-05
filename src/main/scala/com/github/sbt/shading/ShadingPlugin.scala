@@ -1,4 +1,4 @@
-package coursier
+package com.github.sbt.shading
 
 import java.io.File
 import java.nio.charset.StandardCharsets

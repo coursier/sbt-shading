@@ -7,5 +7,5 @@
     )
   )
 
-  addSbtPlugin("io.get-coursier" % "sbt-shading" % pluginVersion)
+  addSbtPlugin("com.github.sbt" % "sbt-shading" % pluginVersion)
 }

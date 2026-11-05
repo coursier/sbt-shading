@@ -1,11 +1,11 @@
-package coursier
+package com.github.sbt.shading
 
 import sbt._
 import sbt.Keys._
 
 /* Ivy publishing delivers an ivy.xml of its own, so republish the shaded one that `deliverLocal`
  * wrote. Only a build that has Ivy may load this object. */
-private[coursier] object IvyRepublish {
+private[shading] object IvyRepublish {
   private val reallyUpdateIvyXml = Def.task {
     val baseFile = deliverLocal.value
     val log = streams.value.log
