@@ -31,7 +31,7 @@ jobs:
       run: sbt '++ 3.x' scriptedTestSbt2
       if: ${{ matrix.java != '8' }}
     - name: Test sbt 2.1
-      run: sbt '++ 3.x' 'set scriptedSbt := "2.1.0-RC1"' scriptedTestSbt2
+      run: sbt '++ 3.x' 'set scriptedSbt := "2.1.0-RC3"' scripted
       if: ${{ matrix.java != '8' }}
 
   publish:
