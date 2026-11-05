@@ -1,11 +1,11 @@
 # sbt-shading
 
 
-[![CI](https://github.com/coursier/sbt-shading/actions/workflows/ci.yml/badge.svg)](https://github.com/coursier/sbt-shading/actions/workflows/ci.yml)
+[![CI](https://github.com/sbt/sbt-shading/actions/workflows/ci.yml/badge.svg)](https://github.com/sbt/sbt-shading/actions/workflows/ci.yml)
 
 Enable the plugin with
 ```scala
-addSbtPlugin("io.get-coursier" % "sbt-shading" % "2.1.6")
+addSbtPlugin("com.github.sbt" % "sbt-shading" % "2.1.6")
 ```
 in `project/plugins.sbt`. sbt-shading requires sbt >= 1.3.0.
 

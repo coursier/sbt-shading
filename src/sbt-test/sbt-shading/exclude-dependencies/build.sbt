@@ -13,6 +13,6 @@ libraryDependencies ++= Seq(
 excludeDependencies += sbt.ExclusionRule("com.chuusai", "shapeless_2.11")
 
 scalaVersion := "2.11.12"
-organization := "io.get-coursier.test"
+organization := "com.github.sbt.test"
 name := "shading-exclude-dependencies"
 version := "0.1.0-SNAPSHOT"

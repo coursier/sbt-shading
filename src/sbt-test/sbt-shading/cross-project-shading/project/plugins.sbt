@@ -7,7 +7,7 @@
     )
   )
   
-  addSbtPlugin("io.get-coursier" % "sbt-shading" % pluginVersion)
+  addSbtPlugin("com.github.sbt" % "sbt-shading" % pluginVersion)
 }
 
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.22.0")

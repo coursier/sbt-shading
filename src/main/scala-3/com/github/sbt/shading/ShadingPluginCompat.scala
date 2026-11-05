@@ -1,11 +1,11 @@
-package coursier
+package com.github.sbt.shading
 
 import java.io.File
 import sbt.*
 import sbt.Keys.*
 import xsbti.VirtualFileRef
 
-private[coursier] trait ShadingPluginCompat { self : ShadingPlugin.type =>
+private[shading] trait ShadingPluginCompat { self : ShadingPlugin.type =>
   inline def toVirtualFile(file: File) =
     fileConverter.value.toVirtualFile(file.toPath)
 

@@ -11,6 +11,6 @@ libraryDependencies ++= Seq(
 )
 
 scalaVersion := "2.11.12"
-organization := "io.get-coursier.test"
+organization := "com.github.sbt.test"
 name := "shading-transitive-test"
 version := "0.1.0-SNAPSHOT"

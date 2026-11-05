@@ -7,7 +7,7 @@
     )
   )
 
-  addSbtPlugin("io.get-coursier" % "sbt-shading" % pluginVersion)
+  addSbtPlugin("com.github.sbt" % "sbt-shading" % pluginVersion)
 }
 
 // projectMatrix is in sbt 2's core. Scala.js 1.21.0 has no sbt 2 build, and 1.22.0 is the first

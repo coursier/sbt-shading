@@ -35,7 +35,7 @@ jobs:
       if: ${{ matrix.java != '8' }}
 
   publish:
-    if: github.event_name == 'push' && github.repository == 'coursier/sbt-shading'
+    if: github.event_name == 'push' && github.repository == 'sbt/sbt-shading'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7
